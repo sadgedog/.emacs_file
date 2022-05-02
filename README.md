@@ -1,1 +1,1 @@
-# .emacs_file
+emacs setting file for mac
