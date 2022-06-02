@@ -43,7 +43,8 @@
 (when (not window-system) (progn
     ;;(load-theme 'tango-dark t)
     ;;(load-theme 'manoj-dark t)
-    (load-theme 'zenburn t)
+    ;;(load-theme 'zenburn t)
+    (load-theme 'modus-vivendi)
     (set-face-attribute 'highlight nil :foreground 'unspecified)
 ))
 
@@ -89,9 +90,8 @@
     (error "The buffer has been modified")))
 
 ; reload buffer
-(global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
+(global-set-key (kbd "M-r") 'revert-buffer-no-confirm)
 
-(setq scroll-conservatively 1)
 
 ;; スタート時のスプラッシュ非表示
 (setq inhibit-startup-message t)
@@ -139,7 +139,9 @@
 (define-key global-map (kbd "C-\\") 'hs-toggle-hiding)
 
 ;;スクロール
-(setq next-screen-context-lines 50)
+;;(setq scroll-conservatively 1)(
+(setq next-screen-context-lines 40)
+
 
 (setq default-frame-alist
       (append '((width                . 100)  ; フレーム幅
@@ -195,5 +197,5 @@
     (if (>= emacs-major-version 24)
     (forward-line -5)))          
 
-(global-set-key (kbd "M-<up>") 'move-line-up)
-(global-set-key (kbd "M-<down>") 'move-line-down)
+(global-set-key (kbd "M-p") 'move-line-up)
+(global-set-key (kbd "M-n") 'move-line-down)
