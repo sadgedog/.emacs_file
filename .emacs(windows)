@@ -1,0 +1,140 @@
+;;.emacs file for windows
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
+ '(custom-enabled-themes '(manoj-dark))
+ '(highlight-indent-guides-delay 0)
+ '(highlight-indent-guides-method 'character)
+ '(package-archives
+   '(("gnu" . "https://elpa.gnu.org/packages/")
+     ("melpa-stable" . "https://stable.melpa.org/packages/")
+     ("melpa" . "https://melpa.org/packages/")))
+ '(package-selected-packages
+   '(lsp-ui lsp-mode helm flycheck poetry yasnippet company mwim whitespace-cleanup-mode rainbow-delimiters highlight-indent-guides highlight-indentation)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Century Gothic" :foundry "outline" :slant normal :weight bold :height 98 :width normal)))))
+
+
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+
+;;(add-hook 'after-init-hook 'global-company-mode)
+
+
+
+(add-to-list 'load-path "/path/to/mwim-dir")
+(autoload 'mwim "mwim" nil t)
+(autoload 'mwim-beginning "mwim" nil t)
+(autoload 'mwim-end "mwim" nil t)
+(autoload 'mwim-beginning-of-code-or-line "mwim" nil t)
+(autoload 'mwim-beginning-of-line-or-code "mwim" nil t)
+(autoload 'mwim-beginning-of-code-or-line-or-comment "mwim" nil t)
+(autoload 'mwim-end-of-code-or-line "mwim" nil t)
+(autoload 'mwim-end-of-line-or-code "mwim" nil t)
+(global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
+(global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
+(global-set-key (kbd "<home>") 'mwim-beginning-of-line-or-code)
+(global-set-key (kbd "<end>") 'mwim-end-of-line-or-code)
+
+
+(require 'company)
+(global-company-mode) ; 全バッファで有効にする 
+(setq company-idle-delay 0) ; デフォルトは0.5
+(setq company-minimum-prefix-length 2) ; デフォルトは4
+(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+
+
+;;(require 'jedi-core)
+;;(setq jedi:complete-on-dot t)
+;;(setq jedi:use-shortcuts t)
+;;(add-hook 'python-mode-hook 'jedi:setup)
+;;(add-to-list 'company-backends 'company-jedi) ; backendに追加
+
+;;(setq jedi:server-command (list (executable-find "jediepcserver"))) 
+
+
+
+;;再度読み込み
+(defun revert-buffer-no-confirm (&optional force-reverting)
+  "Interactive call to revert-buffer. Ignoring the auto-save
+ file and not requesting for confirmation. When the current buffer
+ is modified, the command refuses to revert it, unless you specify
+ the optional argument: force-reverting to true."
+  (interactive "P")
+  ;;(message "force-reverting value is %s" force-reverting)
+  (if (or force-reverting (not (buffer-modified-p)))
+      (revert-buffer :ignore-auto :noconfirm)
+    (error "The buffer has been modified")))
+
+  ;; reload buffer
+  (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
+
+
+(defun move-line-up ()
+    (interactive)
+    (if (>= emacs-major-version 24)
+    (forward-line -5)))          
+
+(global-set-key (kbd "M-p") 'move-line-up)
+(global-set-key (kbd "M-n") 'move-line-down)
+
+;; 行番号の表示
+(if (version<= "26.0.50" emacs-version)
+    (progn
+      (global-display-line-numbers-mode)
+      (set-face-attribute 'line-number nil
+                          :foreground "gray")
+                          ;;:background "#131521")
+      (set-face-attribute 'line-number-current-line nil
+                          :foreground "gold")))
+
+
+;; フルスクリーン化
+(global-set-key (kbd "<M-return>") 'toggle-frame-fullscreen)
+
+;; C-l clear shell
+(defun eshell-clear-buffer ()
+  "Clear terminal"
+  (interactive)
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (eshell-send-input)))
+(add-hook 'eshell-mode-hook
+      '(lambda()
+          (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
+
+;;補完
+(require 'company)
+(global-company-mode) ; 全バッファで有効にする 
+(setq company-idle-delay 0) ; デフォルトは0.5
+(setq company-minimum-prefix-length 2) ; デフォルトは4
+(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+
+;;flycheck
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;;スクロール
+;;(setq scroll-conservatively 1)(
+(setq next-screen-context-lines 40)
+
+(defun move-line-down ()
+  (interactive)
+    (forward-line 5))
+
+(defun move-line-up ()
+    (interactive)
+    (if (>= emacs-major-version 24)
+    (forward-line -5)))          
+
+(global-set-key (kbd "M-p") 'move-line-up)
+(global-set-key (kbd "M-n") 'move-line-down)
