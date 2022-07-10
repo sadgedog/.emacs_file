@@ -8,18 +8,18 @@
  '(current-language-environment "Japanese")
  '(custom-safe-themes
    '("dad622637530638a2140b83812e159a06b4791eb2f67ffd4abb4ff671b062d0b" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" default))
+ '(global-display-line-numbers-mode t)
  '(package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(## cyberpunk-theme solidity-flycheck pdf-tools exec-path-from-shell jedi elpy imenu-list flycheck company mwim zenburn-theme)))
+   '(flycheck-rust ## cyberpunk-theme solidity-flycheck pdf-tools exec-path-from-shell jedi elpy imenu-list flycheck company mwim zenburn-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
 
 ;;shellの文字化け
 (setenv "LC_ALL" "ja_JP.UTF-8")
@@ -29,7 +29,7 @@
   (exec-path-from-shell-copy-envs envs))
 
 ;;highlight
-(add-hook 'prig-mode-hook 'highlight-indent-guides-mode)
+;;(add-hook 'prig-mode-hook 'highlight-indent-guides-mode)
 
 ;;zunburn
 ;; GUI
@@ -47,6 +47,10 @@
     (load-theme 'modus-vivendi)
     (set-face-attribute 'highlight nil :foreground 'unspecified)
 ))
+
+;; font
+(add-to-list 'default-frame-alist
+                       '(font . "Cascadia Mono-13"))
 
 ;;beep sound
 (setq ring-bell-function 'ignore)
@@ -91,7 +95,6 @@
 
 ; reload buffer
 (global-set-key (kbd "M-r") 'revert-buffer-no-confirm)
-
 
 ;; スタート時のスプラッシュ非表示
 (setq inhibit-startup-message t)
@@ -184,6 +187,10 @@
 (add-hook 'xml-mode-hook
           '(lambda ()
              (hs-minor-mode 1)))
+(add-hook 'rust-mode-hook
+          '(lambda ()
+             (hs-minor-mode 1)))
+
 
 ;;PDFファイルをdoc viewで開き、自動更新する
 (add-hook 'doc-view-mode-hook 'auto-revert-mode)
