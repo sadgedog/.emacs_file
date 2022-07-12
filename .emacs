@@ -7,7 +7,7 @@
    [default default default italic underline success warning error])
  '(current-language-environment "Japanese")
  '(custom-safe-themes
-   '("dad622637530638a2140b83812e159a06b4791eb2f67ffd4abb4ff671b062d0b" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" default))
+   '("5a611788d47c1deec31494eb2bb864fde402b32b139fe461312589a9f28835db" "dad622637530638a2140b83812e159a06b4791eb2f67ffd4abb4ff671b062d0b" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" default))
  '(global-display-line-numbers-mode t)
  '(package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
@@ -20,6 +20,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
 
 ;;shellの文字化け
 (setenv "LC_ALL" "ja_JP.UTF-8")
@@ -35,9 +36,8 @@
 ;; GUI
 (when window-system (progn
     ;;(load-theme 'cyberpunk t)
-    ;;(load-theme 'zenburn t)
+    (load-theme 'zenburn t)
     ;;(set-face-attribute 'highlight nil :foreground 'unspecified)
-    (load-theme 'modus-vivendi)
 ))
 ;; CUI
 (when (not window-system) (progn
@@ -67,19 +67,30 @@
           (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
 
 ;;補完
-(require 'company)
-(global-company-mode) ; 全バッファで有効にする 
-(setq company-idle-delay 0) ; デフォルトは0.5
-(setq company-minimum-prefix-length 2) ; デフォルトは4
-(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+;;(require 'company)
+;;(global-company-mode) ; 全バッファで有効にする 
+;;(setq company-idle-delay 0) ; デフォルトは0.5
+;;(setq company-minimum-prefix-length 2) ; デフォルトは4
+;;(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
 
-;;flycheck
-(add-hook 'after-init-hook #'global-flycheck-mode)
 
-;;flycheck for solidity
-(require 'flycheck)
-(require 'solidity-mode)
-(add-to-list 'flycheck-checkers 'solidity-checker)
+
+
+(when (not window-system) (progn
+    ;;flycheck
+    (require 'flycheck)
+    (global-flycheck-mode)
+    (add-hook 'c++-mode-hook (lambda()
+                           (setq flycheck-gcc-language-standard "c++11")
+                           (setq flycheck-clang-language-standard "c++11")))
+    ;;(require 'flycheck)
+    ;;(require 'solidity-mode)
+    ;;(add-to-list 'flycheck-checkers 'solidity-checker)
+    ;;(add-hook 'after-init-hook #'global-flycheck-mode)
+    ;;(add-hook 'c++-mode-hook (lambda () (setq flycheck-gcc-language-standard "c++11")))
+
+))
+
 
 ;;再度読み込み
 (defun revert-buffer-no-confirm (&optional force-reverting)
@@ -96,6 +107,7 @@
 ; reload buffer
 (global-set-key (kbd "M-r") 'revert-buffer-no-confirm)
 
+
 ;; スタート時のスプラッシュ非表示
 (setq inhibit-startup-message t)
 
@@ -103,7 +115,7 @@
 (global-font-lock-mode t)
 
 ;;; バックアップファイルを作らない
-(setq backup-inhibited t)
+;;(setq backup-inhibited t)
 
 ;;; スクロールバーを右側に表示する
 ;; GUI
@@ -119,7 +131,7 @@
 (setq truncate-partial-width-windows t)
 
 ;;; 現在の関数名をモードラインに表示
-(which-function-mode 1)
+;;(which-function-mode 1)
 
 ;;; タブをスペース4字
 (setq-default tab-width 4 indent-tabs-mode nil)
@@ -163,12 +175,14 @@
                 ) default-frame-alist) )
 (setq initial-frame-alist default-frame-alist)
 
-(add-hook 'c++-mode-hook
-          '(lambda ()
-             (hs-minor-mode 1)))
-(add-hook 'c-mode-hook
-          '(lambda ()
-             (hs-minor-mode 1)))
+
+
+;;(add-hook 'c++-mode-hook
+;;          '(lambda ()
+;;             (hs-minor-mode 1)))
+;;(add-hook 'c-mode-hook
+;;          '(lambda ()
+;;             (hs-minor-mode 1)))
 (add-hook 'scheme-mode-hook
           '(lambda ()
              (hs-minor-mode 1)))
@@ -206,3 +220,9 @@
 
 (global-set-key (kbd "M-p") 'move-line-up)
 (global-set-key (kbd "M-n") 'move-line-down)
+
+;;自動保存しない
+(setq auto-save-default nil)
+(setq make-backup-files nil)
+(setq auto-save-list-file-prefix nil)
+(setq create-lockfiles nil)
