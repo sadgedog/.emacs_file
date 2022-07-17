@@ -28,10 +28,6 @@
 
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 
-;;(add-hook 'after-init-hook 'global-company-mode)
-
-
-
 (add-to-list 'load-path "/path/to/mwim-dir")
 (autoload 'mwim "mwim" nil t)
 (autoload 'mwim-beginning "mwim" nil t)
@@ -46,23 +42,11 @@
 (global-set-key (kbd "<home>") 'mwim-beginning-of-line-or-code)
 (global-set-key (kbd "<end>") 'mwim-end-of-line-or-code)
 
-
 (require 'company)
 (global-company-mode) ; 全バッファで有効にする 
 (setq company-idle-delay 0) ; デフォルトは0.5
 (setq company-minimum-prefix-length 2) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-
-
-;;(require 'jedi-core)
-;;(setq jedi:complete-on-dot t)
-;;(setq jedi:use-shortcuts t)
-;;(add-hook 'python-mode-hook 'jedi:setup)
-;;(add-to-list 'company-backends 'company-jedi) ; backendに追加
-
-;;(setq jedi:server-command (list (executable-find "jediepcserver"))) 
-
-
 
 ;;再度読み込み
 (defun revert-buffer-no-confirm (&optional force-reverting)
@@ -77,8 +61,7 @@
     (error "The buffer has been modified")))
 
   ;; reload buffer
-  (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
-
+  (global-set-key (kbd "M-r") 'revert-buffer-no-confirm)
 
 (defun move-line-up ()
     (interactive)
