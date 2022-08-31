@@ -1,5 +1,8 @@
-;;.emacs file for windows
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
@@ -14,30 +17,24 @@
  '(package-selected-packages
    '(lsp-ui lsp-mode helm flycheck poetry yasnippet company mwim whitespace-cleanup-mode rainbow-delimiters highlight-indent-guides highlight-indentation)))
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(default ((t (:family "Century Gothic" :foundry "outline" :slant normal :weight bold :height 98 :width normal)))))
 
 
-(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-
-(add-to-list 'load-path "/path/to/mwim-dir")
-(autoload 'mwim "mwim" nil t)
-(autoload 'mwim-beginning "mwim" nil t)
-(autoload 'mwim-end "mwim" nil t)
-(autoload 'mwim-beginning-of-code-or-line "mwim" nil t)
-(autoload 'mwim-beginning-of-line-or-code "mwim" nil t)
-(autoload 'mwim-beginning-of-code-or-line-or-comment "mwim" nil t)
-(autoload 'mwim-end-of-code-or-line "mwim" nil t)
-(autoload 'mwim-end-of-line-or-code "mwim" nil t)
-(global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
-(global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
-(global-set-key (kbd "<home>") 'mwim-beginning-of-line-or-code)
-(global-set-key (kbd "<end>") 'mwim-end-of-line-or-code)
+;;shellの文字化け
+(setenv "LC_ALL" "ja_JP.UTF-8")
 
 (require 'company)
 (global-company-mode) ; 全バッファで有効にする 
 (setq company-idle-delay 0) ; デフォルトは0.5
 (setq company-minimum-prefix-length 2) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+
+;;beep sound
+(setq ring-bell-function 'ignore)
 
 ;;再度読み込み
 (defun revert-buffer-no-confirm (&optional force-reverting)
@@ -52,7 +49,8 @@
     (error "The buffer has been modified")))
 
   ;; reload buffer
-  (global-set-key (kbd "M-r") 'revert-buffer-no-confirm)
+  (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
+
 
 (defun move-line-up ()
     (interactive)
@@ -87,6 +85,7 @@
       '(lambda()
           (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
 
+
 ;;補完
 (require 'company)
 (global-company-mode) ; 全バッファで有効にする 
@@ -95,7 +94,34 @@
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
 
 ;;flycheck
-(add-hook 'after-init-hook #'global-flycheck-mode)
+;;(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;;flycheck
+(require 'flycheck)
+(global-flycheck-mode)
+(add-hook 'c++-mode-hook (lambda()
+                       (setq flycheck-gcc-language-standard "c++11")
+                       (setq flycheck-clang-language-standard "c++11")))
+(add-hook 'c-mode-hook (lambda()
+                       (setq flycheck-gcc-language-standard "c11")
+                       (setq flycheck-clang-language-standard "c11")))
+
+;; スタート時のスプラッシュ非表示
+;;(setq inhibit-startup-message t)
+
+;; バックアップファイルを作らない
+;;(setq backup-inhibited t)
+;;自動保存しない
+(setq auto-save-default nil)
+(setq make-backup-files nil)
+(setq auto-save-list-file-prefix nil)
+(setq create-lockfiles nil)
+
+
+;;; 画面右端で折り返さない
+(setq-default truncate-lines t)
+(setq truncate-partial-width-windows t)
+
 
 ;;スクロール
 ;;(setq scroll-conservatively 1)(
@@ -110,5 +136,23 @@
     (if (>= emacs-major-version 24)
     (forward-line -5)))          
 
+
 (global-set-key (kbd "M-p") 'move-line-up)
 (global-set-key (kbd "M-n") 'move-line-down)
+
+(setq default-frame-alist
+      (append '((width                . 100)  ; フレーム幅
+                (height               . 50 ) ; フレーム高
+             ;; (left                 . 70 ) ; 配置左位置
+             ;; (top                  . 28 ) ; 配置上位置
+                (line-spacing         . 0  ) ; 文字間隔
+                ;;(left-fringe          . 10 ) ; 左フリンジ幅
+                ;;(right-fringe         . 11 ) ; 右フリンジ幅
+                (menu-bar-lines       . 1  ) ; メニューバーCS
+                (tool-bar-lines       . -1  ) ; ツールバー
+                ;;(vertical-scroll-bars . 1  ) ; スクロールバー
+                ;;(scroll-bar-width     . 1 ) ; スクロールバー幅
+                (cursor-type          . box) ; カーソル種別
+                (alpha                . 100) ; 透明度
+                ) default-frame-alist) )
+(setq initial-frame-alist default-frame-alist)
