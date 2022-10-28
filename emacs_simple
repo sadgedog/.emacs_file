@@ -1,0 +1,57 @@
+;; font
+(add-to-list 'default-frame-alist
+             '(font . "Cascadia Mono-14"))
+
+;;beep sound
+(setq ring-bell-function 'ignore)
+
+;; C-l clear shell
+(defun eshell-clear-buffer ()
+  "Clear terminal"
+  (interactive)
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (eshell-send-input)))
+(add-hook 'eshell-mode-hook
+      '(lambda()
+          (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
+          
+;;flycheck
+(require 'flycheck)
+(global-flycheck-mode)
+(add-hook 'c++-mode-hook (lambda()
+                       (setq flycheck-gcc-language-standard "c++11")
+                       (setq flycheck-clang-language-standard "c++11")))
+(add-hook 'c-mode-hook (lambda()
+                       (setq flycheck-gcc-language-standard "c11")
+                       (setq flycheck-clang-language-standard "c11")))
+
+;;補完
+(require 'company)
+(global-company-mode) ; 全バッファで有効にする 
+(setq company-idle-delay 0) ; デフォルトは0.5
+(setq company-minimum-prefix-length 2) ; デフォルトは4
+(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+
+; reload buffer
+(global-set-key (kbd "M-r") 'revert-buffer-no-confirm)
+
+;;; バックアップファイルを作らない
+;;(setq backup-inhibited t)
+
+;;; 画面右端で折り返さない
+(setq-default truncate-lines t)
+(setq truncate-partial-width-windows t)
+
+;; 行番号の表示
+(if (version<= "26.0.50" emacs-version)
+    (progn
+      (global-display-line-numbers-mode)
+      (set-face-attribute 'line-number nil
+                          :foreground "gray")
+                          ;;:background "#131521")
+      (set-face-attribute 'line-number-current-line nil
+                          :foreground "gold")))
+
+;; フルスクリーン化
+(global-set-key (kbd "<M-return>") 'toggle-frame-fullscreen)
