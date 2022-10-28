@@ -1,11 +1,28 @@
-;; font
+(custom-set-variables
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(current-language-environment "Japanese")
+ '(custom-safe-themes
+   '("5a611788d47c1deec31494eb2bb864fde402b32b139fe461312589a9f28835db" "dad622637530638a2140b83812e159a06b4791eb2f67ffd4abb4ff671b062d0b" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" default))
+ '(global-display-line-numbers-mode t)
+ '(package-archives
+   '(("gnu" . "https://elpa.gnu.org/packages/")
+     ("melpa" . "https://melpa.org/packages/")))
+ '(package-selected-packages
+   '(autodisass-llvm-bitcode multi-term flycheck-rust ## cyberpunk-theme solidity-flycheck pdf-tools exec-path-from-shell jedi elpy imenu-list flycheck company mwim zenburn-theme)))
+(custom-set-faces
+ )
+
+(when (not window-system) (progn
+    (load-theme 'modus-vivendi)
+    (set-face-attribute 'highlight nil :foreground 'unspecified)
+))
+
 (add-to-list 'default-frame-alist
              '(font . "Cascadia Mono-14"))
 
-;;beep sound
 (setq ring-bell-function 'ignore)
 
-;; C-l clear shell
 (defun eshell-clear-buffer ()
   "Clear terminal"
   (interactive)
@@ -15,43 +32,18 @@
 (add-hook 'eshell-mode-hook
       '(lambda()
           (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
-          
-;;flycheck
-(require 'flycheck)
-(global-flycheck-mode)
-(add-hook 'c++-mode-hook (lambda()
-                       (setq flycheck-gcc-language-standard "c++11")
-                       (setq flycheck-clang-language-standard "c++11")))
-(add-hook 'c-mode-hook (lambda()
-                       (setq flycheck-gcc-language-standard "c11")
-                       (setq flycheck-clang-language-standard "c11")))
 
-;;補完
-(require 'company)
-(global-company-mode) ; 全バッファで有効にする 
-(setq company-idle-delay 0) ; デフォルトは0.5
-(setq company-minimum-prefix-length 2) ; デフォルトは4
-(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+(defun revert-buffer-no-confirm (&optional force-reverting)
+  (interactive "P")
+  (if (or force-reverting (not (buffer-modified-p)))
+      (revert-buffer :ignore-auto :noconfirm)
+    (error "The buffer has been modified")))
 
-; reload buffer
 (global-set-key (kbd "M-r") 'revert-buffer-no-confirm)
 
-;;; バックアップファイルを作らない
-;;(setq backup-inhibited t)
+(setq backup-inhibited t)
 
-;;; 画面右端で折り返さない
-(setq-default truncate-lines t)
-(setq truncate-partial-width-windows t)
-
-;; 行番号の表示
-(if (version<= "26.0.50" emacs-version)
-    (progn
-      (global-display-line-numbers-mode)
-      (set-face-attribute 'line-number nil
-                          :foreground "gray")
-                          ;;:background "#131521")
-      (set-face-attribute 'line-number-current-line nil
-                          :foreground "gold")))
-
-;; フルスクリーン化
-(global-set-key (kbd "<M-return>") 'toggle-frame-fullscreen)
+(setq auto-save-default nil)
+(setq make-backup-files nil)
+(setq auto-save-list-file-prefix nil)
+(setq create-lockfiles nil)
