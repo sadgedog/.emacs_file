@@ -43,6 +43,18 @@
 
 (setq backup-inhibited t)
 
+(defun move-line-down ()
+  (interactive)
+    (forward-line 5))
+
+(defun move-line-up ()
+    (interactive)
+    (if (>= emacs-major-version 24)
+    (forward-line -5)))          
+
+(global-set-key (kbd "M-p") 'move-line-up)
+(global-set-key (kbd "M-n") 'move-line-down)
+
 (setq auto-save-default nil)
 (setq make-backup-files nil)
 (setq auto-save-list-file-prefix nil)
