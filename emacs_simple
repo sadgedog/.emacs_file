@@ -2,15 +2,9 @@
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(current-language-environment "Japanese")
+ '(custom-enabled-themes '(wombat))
  '(custom-safe-themes
    '("5a611788d47c1deec31494eb2bb864fde402b32b139fe461312589a9f28835db" "dad622637530638a2140b83812e159a06b4791eb2f67ffd4abb4ff671b062d0b" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" default))
- '(global-display-line-numbers-mode t)
- '(package-archives
-   '(("gnu" . "https://elpa.gnu.org/packages/")
-     ("melpa" . "https://melpa.org/packages/")))
- '(package-selected-packages
-   '(autodisass-llvm-bitcode multi-term flycheck-rust ## cyberpunk-theme solidity-flycheck pdf-tools exec-path-from-shell jedi elpy imenu-list flycheck company mwim zenburn-theme)))
-(custom-set-faces
  )
 
 (when (not window-system) (progn
@@ -54,6 +48,9 @@
 
 (global-set-key (kbd "M-p") 'move-line-up)
 (global-set-key (kbd "M-n") 'move-line-down)
+
+(setq-default truncate-lines t)
+(setq truncate-partial-width-windows t)
 
 (setq auto-save-default nil)
 (setq make-backup-files nil)
